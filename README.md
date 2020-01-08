@@ -11,7 +11,7 @@
 ## 2. Installation
 - Add ```ensure redemrp_planting``` in server.cfg
 
-## 4. Configuration
+## 3. Configuration
 - Add this in your [redemrp_inventory](https://github.com/RedEM-RP/redemrp_inventory) Config.lua file
 ```
 Config.Usable = {"tobaccoseed", "sugarsaneseed", "cornseed"}
@@ -19,7 +19,7 @@ Config.Usable = {"tobaccoseed", "sugarsaneseed", "cornseed"}
 Config.Labels = {["tobaccoseed"] = "Tobacco seed", ["sugarsaneseed"] = "Sugarsane seed", ["cornseed"] = "Corn seed"}
 ```
 
-## 6. Credits
+## 4. Credits
 
 [z00t](https://github.com/z00t) - Thanks for huge help
 
