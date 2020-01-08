@@ -14,9 +14,9 @@
 ## 3. Configuration
 - Add this in your [redemrp_inventory](https://github.com/RedEM-RP/redemrp_inventory) Config.lua file
 ```
-Config.Usable = {"tobaccoseed", "sugarsaneseed", "cornseed", "wateringcan"}
+Config.Usable = {"tobaccoseed", "sugarcaneseed", "cornseed", "wateringcan"}
 
-Config.Labels = {["tobaccoseed"] = "Tobacco seed", ["sugarsaneseed"] = "Sugarsane seed", ["cornseed"] = "Corn seed", ["wateringcan"] = "Watering can"}
+Config.Labels = {["tobaccoseed"] = "Tobacco seed", ["sugarcaneseed"] = "Sugarcane seed", ["cornseed"] = "Corn seed", ["wateringcan"] = "Watering can"}
 ```
 
 ## 4. Credits
