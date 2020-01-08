@@ -1,4 +1,37 @@
 local myPlants, nearField = {}, nil
+local prompt, prompt2 = false, false
+local DelPrompt
+local PlantPrompt
+
+function SetupDelPrompt()
+    Citizen.CreateThread(function()
+        local str = 'Remove Plant'
+        DelPrompt = PromptRegisterBegin()
+        PromptSetControlAction(DelPrompt, 0xE8342FF2)
+        str = CreateVarString(10, 'LITERAL_STRING', str)
+        PromptSetText(DelPrompt, str)
+        PromptSetEnabled(DelPrompt, false)
+        PromptSetVisible(DelPrompt, false)
+        PromptSetHoldMode(DelPrompt, true)
+        PromptRegisterEnd(DelPrompt)
+
+    end)
+end
+
+function SetupPlantPrompt()
+    Citizen.CreateThread(function()
+        local str = 'Plant'
+        PlantPrompt = PromptRegisterBegin()
+        PromptSetControlAction(PlantPrompt, 0x07CE1E61)
+        str = CreateVarString(10, 'LITERAL_STRING', str)
+        PromptSetText(PlantPrompt, str)
+        PromptSetEnabled(PlantPrompt, false)
+        PromptSetVisible(PlantPrompt, false)
+        PromptSetHoldMode(PlantPrompt, true)
+        PromptRegisterEnd(PlantPrompt)
+
+    end)
+end
 
 RegisterNetEvent('poke_planting:planto1')
 AddEventHandler('poke_planting:planto1', function(hash1, hash2, hash3)
@@ -6,10 +39,8 @@ AddEventHandler('poke_planting:planto1', function(hash1, hash2, hash3)
     local pHead = GetEntityHeading(myPed)
     local pos = GetEntityCoords(PlayerPedId())
     local plant1 = GetHashKey(hash1)
-    
     if Vdist(Config.Locations.x, Config.Locations.y, Config.Locations.z, pos.x, pos.y, pos.z) < 30.0 then
-    
-        
+
         if not HasModelLoaded(plant1) then
             RequestModel(plant1)
         end
@@ -25,7 +56,18 @@ AddEventHandler('poke_planting:planto1', function(hash1, hash2, hash3)
         AttachEntityToEntity(tempObj, myPed, 0, 0.0, 1.0, -0.7, 0.0, 0.0, 0.0, true, false, false, false, false)
         while placing do
             Wait(10)
-            if Citizen.InvokeNative(0x50F940259D3841E6, 1, 0x07CE1E61) then
+            if prompt == false then
+                PromptSetEnabled(PlantPrompt, true)
+                PromptSetVisible(PlantPrompt, true)
+                prompt = true
+            end
+            if PromptHasHoldModeCompleted(PlantPrompt) then
+                PromptSetEnabled(PlantPrompt, false)
+                PromptSetVisible(PlantPrompt, false)
+                PromptSetEnabled(DelPrompt, false)
+                PromptSetVisible(DelPrompt, false)
+                prompt = false
+                prompt2 = false
                 local pPos = GetEntityCoords(tempObj)
                 DeleteObject(tempObj)
                 animacion()
@@ -36,7 +78,18 @@ AddEventHandler('poke_planting:planto1', function(hash1, hash2, hash3)
                 SetEntityAsMissionEntity(myPlants[plantCount].object, true)
                 break
             end
-            if Citizen.InvokeNative(0x50F940259D3841E6, 1, 0xF84FA74F) then
+            if prompt2 == false then
+                PromptSetEnabled(DelPrompt, true)
+                PromptSetVisible(DelPrompt, true)
+                prompt2 = true
+            end
+            if PromptHasHoldModeCompleted(DelPrompt) then
+                PromptSetEnabled(PlantPrompt, false)
+                PromptSetVisible(PlantPrompt, false)
+                PromptSetEnabled(DelPrompt, false)
+                PromptSetVisible(DelPrompt, false)
+                prompt = false
+                prompt2 = false
                 DeleteObject(tempObj)
                 break
             end
@@ -124,6 +177,8 @@ function harvestPlant(key)
 end
 
 Citizen.CreateThread(function()
+    SetupPlantPrompt()
+    SetupDelPrompt()
     while true do
         Wait(1000)
         local pos = GetEntityCoords(PlayerPedId())
@@ -231,7 +286,7 @@ function CreateVarString(p0, p1, variadic)
 end
 
 function DrawText3D(x, y, z, text)
-    local onScreen,_x,_y=GetHudScreenPositionFromWorldPosition(x, y, z)
+    local onScreen,_x,_y=GetScreenCoordFromWorldCoord(x, y, z)
     local px,py,pz=table.unpack(GetGameplayCamCoord())
     
     SetTextScale(0.35, 0.35)
