@@ -14,7 +14,7 @@ RegisterServerEvent("RegisterUsableItem:sugarsaneseed")
 AddEventHandler("RegisterUsableItem:sugarsaneseed", function(source)
     local _source = source
     TriggerClientEvent('poke_planting:planto1', _source, "CRP_SUGARCANE_AA_SIM", "CRP_SUGARCANE_AB_SIM", "CRP_SUGARCANE_AC_SIM")
-	data.delItem(_source, "sugarsaneseed", 1)
+	data.delItem(_source, "sugarcaneseed", 1)
 end)
 
 RegisterServerEvent("RegisterUsableItem:cornseed")
