@@ -127,7 +127,7 @@ Citizen.CreateThread(function()
     while true do
         Wait(1000)
         local pos = GetEntityCoords(PlayerPedId())
-        for k, v in pairs(Config) do
+        for k, v in pairs(Config.Locations) do
             if Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 30.0 then
                 nearField = true
                 if myPlants[1] ~= nil then
