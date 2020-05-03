@@ -37,79 +37,81 @@ RegisterNetEvent('poke_planting:planto1')
 AddEventHandler('poke_planting:planto1', function(hash1, hash2, hash3)
     local myPed = PlayerPedId()
     local pHead = GetEntityHeading(myPed)
-    local pos = GetEntityCoords(PlayerPedId())
+    local pos = GetEntityCoords(PlayerPedId(), true)
     local plant1 = GetHashKey(hash1)
-    if Vdist(Config.Locations.x, Config.Locations.y, Config.Locations.z, pos.x, pos.y, pos.z) < 30.0 then
+    for k,v in pairs(Config.Locations) do
+        if GetDistanceBetweenCoords(v.x, v.y, v.z, pos.x, pos.y, pos.z, true) < 30.0 then
 
-        if not HasModelLoaded(plant1) then
-            RequestModel(plant1)
-        end
+		if not HasModelLoaded(plant1) then
+		    RequestModel(plant1)
+		end
 
-        while not HasModelLoaded(plant1) do
-            Citizen.Wait(1)
-        end
-        
-        local placing = true
-        local tempObj = CreateObject(plant1, pos.x, pos.y, pos.z, true, true, false)
-        SetEntityHeading(tempObj, pHead)
-        SetEntityAlpha(tempObj, 51)
-        AttachEntityToEntity(tempObj, myPed, 0, 0.0, 1.0, -0.7, 0.0, 0.0, 0.0, true, false, false, false, false)
-        while placing do
-            Wait(10)
-            if prompt == false then
-                PromptSetEnabled(PlantPrompt, true)
-                PromptSetVisible(PlantPrompt, true)
-                prompt = true
-            end
-            if PromptHasHoldModeCompleted(PlantPrompt) then
-                PromptSetEnabled(PlantPrompt, false)
-                PromptSetVisible(PlantPrompt, false)
-                PromptSetEnabled(DelPrompt, false)
-                PromptSetVisible(DelPrompt, false)
-                prompt = false
-                prompt2 = false
-                local pPos = GetEntityCoords(tempObj)
-                DeleteObject(tempObj)
-                animacion()
-                local object = CreateObject(plant1, pPos.x, pPos.y, pPos.z, true, true, false)
-                myPlants[#myPlants+1] = {["object"] = object, ['x'] = pPos.x, ['y'] = pPos.y, ['z'] = pPos.z, ['stage'] = 1, ['hash'] = hash1, ['hash2'] = hash2, ['hash3'] = hash3,}
-                local plantCount = #myPlants
-                PlaceObjectOnGroundProperly(myPlants[plantCount].object)
-                SetEntityAsMissionEntity(myPlants[plantCount].object, true)
-                break
-            end
-            if prompt2 == false then
-                PromptSetEnabled(DelPrompt, true)
-                PromptSetVisible(DelPrompt, true)
-                prompt2 = true
-            end
-            if PromptHasHoldModeCompleted(DelPrompt) then
-                PromptSetEnabled(PlantPrompt, false)
-                PromptSetVisible(PlantPrompt, false)
-                PromptSetEnabled(DelPrompt, false)
-                PromptSetVisible(DelPrompt, false)
-                prompt = false
-                prompt2 = false
-                DeleteObject(tempObj)
-                break
-            end
-        end
-    end
+		while not HasModelLoaded(plant1) do
+		    Citizen.Wait(1)
+		end
+
+		local placing = true
+		local tempObj = CreateObject(plant1, pos.x, pos.y, pos.z, true, true, false)
+		SetEntityHeading(tempObj, pHead)
+		SetEntityAlpha(tempObj, 51)
+		AttachEntityToEntity(tempObj, myPed, 0, 0.0, 1.0, -0.7, 0.0, 0.0, 0.0, true, false, false, false, false)
+		while placing do
+		    Wait(10)
+		    if prompt == false then
+			PromptSetEnabled(PlantPrompt, true)
+			PromptSetVisible(PlantPrompt, true)
+			prompt = true
+		    end
+		    if PromptHasHoldModeCompleted(PlantPrompt) then
+			PromptSetEnabled(PlantPrompt, false)
+			PromptSetVisible(PlantPrompt, false)
+			PromptSetEnabled(DelPrompt, false)
+			PromptSetVisible(DelPrompt, false)
+			prompt = false
+			prompt2 = false
+			local pPos = GetEntityCoords(tempObj, true)
+			DeleteObject(tempObj)
+			animacion()
+			local object = CreateObject(plant1, pPos.x, pPos.y, pPos.z, true, true, false)
+			myPlants[#myPlants+1] = {["object"] = object, ['x'] = pPos.x, ['y'] = pPos.y, ['z'] = pPos.z, ['stage'] = 1, ['hash'] = hash1, ['hash2'] = hash2, ['hash3'] = hash3,}
+			local plantCount = #myPlants
+			PlaceObjectOnGroundProperly(myPlants[plantCount].object)
+			SetEntityAsMissionEntity(myPlants[plantCount].object, true)
+			break
+		    end
+		    if prompt2 == false then
+			PromptSetEnabled(DelPrompt, true)
+			PromptSetVisible(DelPrompt, true)
+			prompt2 = true
+		    end
+		    if PromptHasHoldModeCompleted(DelPrompt) then
+			PromptSetEnabled(PlantPrompt, false)
+			PromptSetVisible(PlantPrompt, false)
+			PromptSetEnabled(DelPrompt, false)
+			PromptSetVisible(DelPrompt, false)
+			prompt = false
+			prompt2 = false
+			DeleteObject(tempObj)
+			break
+		    end
+		end
+	    end
+	end
 end)
 
 RegisterNetEvent('poke_planting:regar1')
 AddEventHandler('poke_planting:regar1', function(source)
-    local pos = GetEntityCoords(PlayerPedId())
+    local pos = GetEntityCoords(PlayerPedId(), true)
     --local plant2 = GetHashKey("CRP_TOBACCOPLANT_AB_SIM")
     local object = nil
     local key = nil
     local hash1, hash2, hash3 = nil, nil, nil
-    local planta = GetEntityCoords(object)
+    local planta = GetEntityCoords(object, true)
     local x, y, z = nil, nil, nil
     
     for k, v in ipairs(myPlants) do
         if v.stage == 1 then
-            if Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 2.0 then
+            if GetDistanceBetweenCoords(v.x, v.y, v.z, pos.x, pos.y, pos.z, true) < 2.0 then
                 object = v.object
                 key = k
                 x, y, z = v.x, v.y, v.z
@@ -144,7 +146,7 @@ end)
 RegisterNetEvent('poke_planting:fin2')
 AddEventHandler('poke_planting:fin2', function(object2, x, y, z, key, hash1, hash2, hash3)
     --local plant3 = GetHashKey("CRP_TOBACCOPLANT_AC_SIM")
-    local planta2 = GetEntityCoords(object2)
+    local planta2 = GetEntityCoords(object2, true)
     
     TriggerEvent("redemrp_notification:start", 'Your plant has matured!', 5)
     
@@ -181,13 +183,13 @@ Citizen.CreateThread(function()
     SetupDelPrompt()
     while true do
         Wait(1000)
-        local pos = GetEntityCoords(PlayerPedId())
+        local pos = GetEntityCoords(PlayerPedId(), true)
         for k, v in pairs(Config.Locations) do
-            if Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 30.0 then
+            if GetDistanceBetweenCoords(v.x, v.y, v.z, pos.x, pos.y, pos.z, true) < 30.0 then
                 nearField = true
                 if myPlants[1] ~= nil then
                     for k, v in ipairs(myPlants) do
-                        if Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 30 then
+                        if GetDistanceBetweenCoords(v.x, v.y, v.z, pos.x, pos.y, pos.z, true) < 30 then
                             if v.stage == 2 then
                                 v.timer = v.timer-1
                                 if v.timer == 0 then
@@ -196,13 +198,13 @@ Citizen.CreateThread(function()
                                     TriggerEvent('poke_planting:fin2', v.object, v.x, v.y, v.z, key, v.hash, v.hash2, v.hash3)
                                 end
                             end    
-                            if v.stage == 3 and Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) <= 2 then
+                            if v.stage == 3 and GetDistanceBetweenCoords(v.x, v.y, v.z, pos.x, pos.y, pos.z, true) <= 2 then
                                 if not v.prompt then
                                     v.prompt = true
                                 end
                             end
                                 
-                            if v.stage == 3 and Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) > 3 then
+                            if v.stage == 3 and GetDistanceBetweenCoords(v.x, v.y, v.z, pos.x, pos.y, pos.z, true) > 3 then
                                 if v.prompt then
                                     v.prompt = false
                                 end
@@ -221,9 +223,9 @@ Citizen.CreateThread(function()
 	while true do
 		Wait(1)
 		if myPlants[1] ~= nil and nearField then
-			local pos = GetEntityCoords(PlayerPedId())
+			local pos = GetEntityCoords(PlayerPedId(), true)
 			for k, v in ipairs(myPlants) do
-				if Vdist(v.x, v.y, v.z, pos.x, pos.y, pos.z) < 7.0 then
+				if GetDistanceBetweenCoords(v.x, v.y, v.z, pos.x, pos.y, pos.z, true) < 7.0 then
 					if v.stage == 1 then
 						DrawText3D(v.x, v.y, v.z, 'Need water!')
 					end
