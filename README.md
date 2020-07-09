@@ -1,5 +1,7 @@
 # redemrp_planting script!
 
+- I am not giving more support of resources created for this framework, due to its toxic community.
+
 ## 1. Requirements
 
 [redem-roleplay](https://github.com/RedEM-RP/redem_roleplay/)
