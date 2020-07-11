@@ -1,6 +1,6 @@
 # redemrp_planting script!
 
-- I am not giving more support of resources created for this framework, due to its toxic community.
+- I am not giving more support of resources created for this framework.
 
 ## 1. Requirements
 
