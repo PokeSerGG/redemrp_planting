@@ -1,6 +1,6 @@
 # redemrp_planting script!
 
-- I am not giving more support of resources created for this framework.
+- I am not giving more support for this resource.
 
 ## 1. Requirements
 
@@ -24,5 +24,3 @@ Config.Labels = {["tobaccoseed"] = "Tobacco seed", ["sugarcaneseed"] = "Sugarcan
 ## 4. Credits
 
 [z00t](https://github.com/z00t) - Thanks for huge help
-
-Join discord to get support - [Discord](https://discord.gg/FKH4uwb)
